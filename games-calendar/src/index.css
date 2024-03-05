@@ -13,6 +13,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.press-start-2p-regular {
+  font-family: "Press Start 2P", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.electrolize-regular {
+  font-family: "Electrolize", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
 .game-title {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -58,6 +72,15 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.gameTitle {
+  font-family: "Press Start 2P";
+}
+
+.labelText {
+  color: #919191;
+  font-family: "Electrolize";
 }
 
 @media (prefers-color-scheme: light) {
