@@ -160,6 +160,7 @@ const App = () => {
     return (
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {games.map(game => (
+          <Link to={`/game/${game.name}`} style={{ textDecoration: 'none' }}>
           <Panel key={game.id} shaded bordered bodyFill style={{ width: 240, margin: 10 }}>
             <div style={{ flex: '1 0 auto' }}>
               <img src={game.background_image} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
@@ -168,6 +169,7 @@ const App = () => {
               <p style={{ margin: 0, alignSelf: 'flex-end' }}>Release Date: {game.released}</p>
             </Panel>
           </Panel>
+          </Link>
         ))}
       </div>
     );
