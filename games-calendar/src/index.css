@@ -79,6 +79,10 @@ button:focus-visible {
   background-color: #10171d00;
 }
 
+.filterButton {
+  margin: 0 0.3rem;
+}
+
 .gameTitle {
   font-family: "Press Start 2P";
 }

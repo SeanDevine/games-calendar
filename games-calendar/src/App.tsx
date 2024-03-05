@@ -20,6 +20,8 @@ const App = () => {
   const [view, setView] = useState('calendar'); // 'calendar' or 'list'
   const [platformFilters, setPlatformFilters] = useState(Object.keys(platformIds).reduce((acc, platform) => ({ ...acc, [platform]: true }), {}));
   const [filterApplied, setFilterApplied] = useState(false);
+  const [matureFilter, setMatureFilter] = useState(true);
+
 
   useEffect(() => {
     fetchPopularGames();
@@ -31,7 +33,7 @@ const App = () => {
     const endDate = new Date(visibleMonth);
     endDate.setMonth(endDate.getMonth() + 1, 0);
 
-    const response = await fetch(`${apiUrl}games?key=${apiKey}&dates=${startDate.toISOString().split('T')[0]},${endDate.toISOString().split('T')[0]}&ordering=-added`);
+    const response = await fetch(`${apiUrl}games?key=${apiKey}&dates=${startDate.toISOString().split('T')[0]},${endDate.toISOString().split('T')[0]}&page_size=40`);
 
     if (!response.ok) {
       console.error('Network response was not ok');
@@ -57,21 +59,36 @@ const App = () => {
     }));
   }
 
-  function applyFilters() {
-    const filteredGames = popularGames.filter(game => {
-      const platformIds = game.platforms.map(platform => platform.platform.id);
-      return platformIds.some(id => {
-        if (platformFilters.playstation && (id === 18 || id === 187)) return true;
-        if (platformFilters.xbox && (id === 1 || id === 186)) return true;
-        if (platformFilters.pc && id === 4) return true;
-        if (platformFilters.switch && id === 7) return true;
-        if (platformFilters.mobile && (id === 21 || id === 3)) return true;
-        return false;
-      });
-    });
-    setPopularGames(filteredGames);
-    setFilterApplied(true);
+  function toggleMatureFilter() {
+    setMatureFilter(prevFilter => !prevFilter);
   }
+  
+
+  function applyFilters() {
+  const filteredGames = popularGames.filter(game => {
+    const platformIds = game.platforms.map(platform => platform.platform.id);
+    const hasValidPlatform = platformIds.some(id => {
+      if (platformFilters.playstation && (id === 18 || id === 187)) return true;
+      if (platformFilters.xbox && (id === 1 || id === 186)) return true;
+      if (platformFilters.pc && id === 4) return true;
+      if (platformFilters.switch && id === 7) return true;
+      if (platformFilters.mobile && (id === 21 || id === 3)) return true;
+      return false;
+    });
+
+    const hasNoMatureTags = !game.tags || !game.tags.some(tag => 
+      ['sexual content', 'nsfw', 'mature', 'hentai'].includes(tag.name.toLowerCase())
+    );
+
+    return hasValidPlatform && hasNoMatureTags;
+  });
+
+  setPopularGames(filteredGames);
+  setFilterApplied(true);
+}
+
+  
+  
 
   function clearFilters() {
     setPlatformFilters({
@@ -98,6 +115,15 @@ const App = () => {
       </div>
     );
   }
+
+  function renderMatureFilterToggle() {
+    return (
+      <Checkbox checked={matureFilter} onChange={toggleMatureFilter}>
+        Show Mature Content
+      </Checkbox>
+    );
+  }
+  
 
   function renderCell(date) {
     if (popularGames.length === 0) {
@@ -247,8 +273,9 @@ const App = () => {
             <div>
               <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
               {renderPlatformCheckboxes()}
-              <Button onClick={applyFilters}>Apply Filters</Button>
-              {filterApplied && <Button onClick={clearFilters}>Clear Filters</Button>}
+              {renderMatureFilterToggle()}
+              <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
+              {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
               <Calendar
                 bordered
                 renderCell={renderCell}
@@ -260,8 +287,9 @@ const App = () => {
             <div>
               <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
               {renderPlatformCheckboxes()}
-              <Button onClick={applyFilters}>Apply Filters</Button>
-              {filterApplied && <Button onClick={clearFilters}>Clear Filters</Button>}
+              {renderMatureFilterToggle()}
+              <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
+              {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
               {renderListView()}
             </div>
           )} />
