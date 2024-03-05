@@ -1,44 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
-import { Calendar, Whisper, Popover, Button, ButtonGroup, Panel } from 'rsuite';
+import { Calendar, Whisper, Popover, Button, ButtonGroup, Panel, Checkbox } from 'rsuite';
 import GameDetails from './GameDetails'; // Import the GameDetails component
 
 const apiKey = 'c9bf349e90a04c5f852186b91ab54688';
 const apiUrl = 'https://api.rawg.io/api/';
 
-async function fetchPopularGames(startDate, endDate) {
-  try {
-    const response = await fetch(`${apiUrl}games?key=${apiKey}&dates=${startDate.toISOString().split('T')[0]},${endDate.toISOString().split('T')[0]}&ordering=-added`);
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    const data = await response.json();
-    return data.results;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return [];
-  }
-}
+const platformIds = {
+  playstation: 18,
+  xbox: 1,
+  pc: 4,
+  switch: 7,
+  mobile: 21
+};
 
 const App = () => {
   const [popularGames, setPopularGames] = useState([]);
   const [visibleMonth, setVisibleMonth] = useState(new Date());
   const [view, setView] = useState('calendar'); // 'calendar' or 'list'
+  const [platformFilters, setPlatformFilters] = useState(Object.keys(platformIds).reduce((acc, platform) => ({ ...acc, [platform]: true }), {}));
+  const [filterApplied, setFilterApplied] = useState(false);
 
   useEffect(() => {
-    fetchGamesForVisibleRange();
+    fetchPopularGames();
   }, [visibleMonth, view]);
 
-  async function fetchGamesForVisibleRange() {
+  async function fetchPopularGames() {
     const startDate = new Date(visibleMonth);
     startDate.setDate(1);
     const endDate = new Date(visibleMonth);
     endDate.setMonth(endDate.getMonth() + 1, 0);
 
-    const games = await fetchPopularGames(startDate, endDate);
-    setPopularGames(games);
+    const response = await fetch(`${apiUrl}games?key=${apiKey}&dates=${startDate.toISOString().split('T')[0]},${endDate.toISOString().split('T')[0]}&ordering=-added`);
+
+    if (!response.ok) {
+      console.error('Network response was not ok');
+      return;
+    }
+
+    const data = await response.json();
+    setPopularGames(data.results);
   }
 
   function handleCalendarChange(date) {
@@ -47,6 +48,55 @@ const App = () => {
 
   function toggleView() {
     setView(view === 'calendar' ? 'list' : 'calendar');
+  }
+
+  function togglePlatformFilter(platform) {
+    setPlatformFilters(prevFilters => ({
+      ...prevFilters,
+      [platform]: !prevFilters[platform]
+    }));
+  }
+
+  function applyFilters() {
+    const filteredGames = popularGames.filter(game => {
+      const platformIds = game.platforms.map(platform => platform.platform.id);
+      return platformIds.some(id => {
+        if (platformFilters.playstation && (id === 18 || id === 187)) return true;
+        if (platformFilters.xbox && (id === 1 || id === 186)) return true;
+        if (platformFilters.pc && id === 4) return true;
+        if (platformFilters.switch && id === 7) return true;
+        if (platformFilters.mobile && (id === 21 || id === 3)) return true;
+        return false;
+      });
+    });
+    setPopularGames(filteredGames);
+    setFilterApplied(true);
+  }
+
+  function clearFilters() {
+    setPlatformFilters({
+      playstation: true,
+      xbox: true,
+      pc: true,
+      switch: true,
+      mobile: true
+    });
+    fetchPopularGames(); // Fetch popular games again without any filtering
+    setFilterApplied(false);
+  }
+  
+
+  function renderPlatformCheckboxes() {
+    return (
+      <div>
+        {Object.entries(platformFilters).map(([platform, checked]) => (
+          <Checkbox key={platform} checked={checked} onChange={() => togglePlatformFilter(platform)}>
+            {platform}
+          </Checkbox>
+        ))}
+        <Button onClick={applyFilters}>Apply Filters</Button>
+      </div>
+    );
   }
 
   function renderCell(date) {
@@ -196,6 +246,8 @@ const App = () => {
           <Route path="/" element={view === 'calendar' ? (
             <div>
               <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
+              {renderPlatformCheckboxes()}
+              {filterApplied && <Button onClick={clearFilters}>Clear Filters</Button>}
               <Calendar
                 bordered
                 renderCell={renderCell}
@@ -206,6 +258,8 @@ const App = () => {
           ) : (
             <div>
               <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
+              {renderPlatformCheckboxes()}
+              {filterApplied && <Button onClick={clearFilters}>Clear Filters</Button>}
               {renderListView()}
             </div>
           )} />
