@@ -198,19 +198,23 @@ const App = () => {
   return (
     <Router>
       <div>
-        <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
-        
         {/* Define routes */}
         <Routes>
           <Route path="/" element={view === 'calendar' ? (
-            <Calendar
-              bordered
-              renderCell={renderCell}
-              onChange={handleCalendarChange}
-              value={visibleMonth}
-            />
+            <div>
+              <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
+              <Calendar
+                bordered
+                renderCell={renderCell}
+                onChange={handleCalendarChange}
+                value={visibleMonth}
+              />
+            </div>
           ) : (
-            renderListView()
+            <div>
+              <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
+              {renderListView()}
+            </div>
           )} />
           <Route path="/game/:id" element={<GameDetails />} /> {/* Route for GameDetails */}
         </Routes>
