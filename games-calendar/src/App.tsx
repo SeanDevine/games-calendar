@@ -133,9 +133,9 @@ const App = () => {
     return (
       <div>
         <ButtonGroup size="md" style={{ margin: 10 }}>
-          <Button onClick={() => setVisibleMonth(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1))}>&lt;</Button>
-          <Button>{visibleMonth.toLocaleString('default', { month: 'short', year: 'numeric' })}</Button>
-          <Button onClick={() => setVisibleMonth(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1))}>&gt;</Button>
+          <Button className='listViewButton' onClick={() => setVisibleMonth(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1))}>&lt;</Button>
+          <Button className='listViewButton'>{visibleMonth.toLocaleString('default', { month: 'short', year: 'numeric' })}</Button>
+          <Button className='listViewButton' onClick={() => setVisibleMonth(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1))}>&gt;</Button>
         </ButtonGroup>
         {weeks.map(week => (
           <div key={week.start}>

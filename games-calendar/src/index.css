@@ -44,6 +44,7 @@ a:hover {
 
 body {
   margin: 0;
+  padding: 0 5%;
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -72,6 +73,10 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.listViewButton {
+  background-color: #10171d00;
 }
 
 .gameTitle {
