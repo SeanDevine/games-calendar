@@ -94,7 +94,7 @@ const App = () => {
             {platform}
           </Checkbox>
         ))}
-        <Button onClick={applyFilters}>Apply Filters</Button>
+        
       </div>
     );
   }
@@ -247,6 +247,7 @@ const App = () => {
             <div>
               <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
               {renderPlatformCheckboxes()}
+              <Button onClick={applyFilters}>Apply Filters</Button>
               {filterApplied && <Button onClick={clearFilters}>Clear Filters</Button>}
               <Calendar
                 bordered
@@ -259,6 +260,7 @@ const App = () => {
             <div>
               <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
               {renderPlatformCheckboxes()}
+              <Button onClick={applyFilters}>Apply Filters</Button>
               {filterApplied && <Button onClick={clearFilters}>Clear Filters</Button>}
               {renderListView()}
             </div>
