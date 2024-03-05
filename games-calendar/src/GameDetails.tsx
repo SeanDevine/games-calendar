@@ -1,14 +1,14 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 
-const GameDetails = () => {
-  const { id } = useParams();
+const GameDetails = ({ match }) => {
+  const gameId = match.params.id;
 
   return (
     <div>
-      <h2>Game Details for ID: {id}</h2>
+      <h2>Game Details for ID: {gameId}</h2>
+      {/* TODO: Add game details */}
     </div>
   );
 };
 
-export { GameDetails };
+export default GameDetails;

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 import { Calendar, Whisper, Popover, Button, ButtonGroup, Panel } from 'rsuite';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { GameDetails } from './GameDetails'; // Import GameDetails
 
 const apiKey = 'c9bf349e90a04c5f852186b91ab54688';
 const apiUrl = 'https://api.rawg.io/api/';
 
-async function fetchPopularGames(startDate: Date, endDate: Date) {
+async function fetchPopularGames(startDate, endDate) {
   try {
     const response = await fetch(`${apiUrl}games?key=${apiKey}&dates=${startDate.toISOString().split('T')[0]},${endDate.toISOString().split('T')[0]}&ordering=-added`);
 
@@ -21,6 +20,17 @@ async function fetchPopularGames(startDate: Date, endDate: Date) {
     return [];
   }
 }
+
+const GameDetails = () => {
+  const { id } = useParams();
+
+  return (
+    <div>
+      <h2>Game Details for ID: {id}</h2>
+      {/* Fetch and display game details using the id */}
+    </div>
+  );
+};
 
 const App = () => {
   const [popularGames, setPopularGames] = useState([]);
@@ -49,6 +59,67 @@ const App = () => {
     setView(view === 'calendar' ? 'list' : 'calendar');
   }
 
+  function renderCell(date) {
+    if (popularGames.length === 0) {
+      return null;
+    }
+  
+    const gameTitles = getGameTitles(date);
+  
+    if (
+      date.getMonth() === visibleMonth.getMonth() &&
+      date.getFullYear() === visibleMonth.getFullYear()
+    ) {
+      const displayList = gameTitles.slice(0, 2);
+  
+      if (gameTitles.length > 2) {
+        const moreItem = (
+          <Whisper
+            placement="top"
+            trigger="click"
+            speaker={
+              <Popover>
+                {gameTitles.map((title, index) => (
+                  <p key={index}>
+                    <Link to={`/game/${title}`} style={{ color: 'inherit' }}>{title}</Link>
+                  </p>
+                ))}
+              </Popover>
+            }
+          >
+            <Button>See All</Button>
+          </Whisper>
+        );
+  
+        return (
+          <div className="calendar-cell">
+            {displayList.map((title, index) => (
+              <div key={index}>
+                <Link to={`/game/${title}`} style={{ color: 'inherit' }}>{title}</Link>
+              </div>
+            ))}
+            {moreItem}
+          </div>
+        );
+      } else if (gameTitles.length > 0) {
+        return (
+          <div className="calendar-cell">
+            {displayList.map((title, index) => (
+              <div key={index}>
+                <Link to={`/game/${title}`} style={{ color: 'inherit' }}>{title}</Link>
+              </div>
+            ))}
+          </div>
+        );
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+  
+
   function getGameTitles(date) {
     const day = date.getDate();
     const month = date.getMonth() + 1;
@@ -63,81 +134,6 @@ const App = () => {
     });
 
     return gamesForDay.map(game => game.name);
-  }
-
-  function renderCell(date) {
-    if (popularGames.length === 0) {
-      return null;
-    }
-
-    const gameTitles = getGameTitles(date);
-
-    if (
-      date.getMonth() === visibleMonth.getMonth() &&
-      date.getFullYear() === visibleMonth.getFullYear()
-    ) {
-      const displayList = gameTitles.slice(0, 2);
-
-      if (gameTitles.length > 2) {
-        const moreItem = (
-          <Whisper
-            placement="top"
-            trigger="click"
-            speaker={
-              <Popover>
-                {gameTitles.map((title, index) => (
-                  <p key={index}>{title}</p>
-                ))}
-              </Popover>
-            }
-          >
-            <Button>See All</Button>
-          </Whisper>
-        );
-
-        return (
-          <div className="calendar-cell">
-            {displayList.map((title, index) => (
-              <div key={index}>
-                <Link to={`/game/${title}`}>{title}</Link>
-              </div>
-            ))}
-            {moreItem}
-          </div>
-        );
-      } else if (gameTitles.length > 0) {
-        return (
-          <div className="calendar-cell">
-            {displayList.map((title, index) => (
-              <div key={index}>
-                <Link to={`/game/${title}`}>{title}</Link>
-              </div>
-            ))}
-          </div>
-        );
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
-
-  function renderGameCards(games) {
-    return (
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {games.map(game => (
-          <Panel key={game.id} shaded bordered bodyFill style={{ width: 240, margin: 10 }}>
-            <div style={{ flex: '1 0 auto' }}>
-              <img src={game.background_image} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
-            </div>
-            <Panel header={game.name} style={{ height: 120, overflow: 'hidden' }}>
-              <p style={{ margin: 0, alignSelf: 'flex-end' }}>Release Date: {game.released}</p>
-            </Panel>
-          </Panel>
-        ))}
-      </div>
-    );
   }
 
   function renderListView() {
@@ -155,6 +151,23 @@ const App = () => {
             <h4>{week.start.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - {week.end.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h4>
             <div>{renderGameCards(popularGames.filter(game => new Date(game.released) >= week.start && new Date(game.released) <= week.end))}</div>
           </div>
+        ))}
+      </div>
+    );
+  }
+
+  function renderGameCards(games) {
+    return (
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {games.map(game => (
+          <Panel key={game.id} shaded bordered bodyFill style={{ width: 240, margin: 10 }}>
+            <div style={{ flex: '1 0 auto' }}>
+              <img src={game.background_image} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
+            </div>
+            <Panel header={game.name} style={{ height: 120, overflow: 'hidden' }}>
+              <p style={{ margin: 0, alignSelf: 'flex-end' }}>Release Date: {game.released}</p>
+            </Panel>
+          </Panel>
         ))}
       </div>
     );
@@ -186,19 +199,20 @@ const App = () => {
     <Router>
       <div>
         <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
-        {view === 'calendar' ? (
-          <Calendar
-            bordered
-            renderCell={renderCell}
-            onChange={handleCalendarChange}
-            value={visibleMonth}
-          />
-        ) : (
-          renderListView()
-        )}
-
+        
+        {/* Define routes */}
         <Routes>
-          <Route path="/game/:id" element={<GameDetails />} />
+          <Route path="/" element={view === 'calendar' ? (
+            <Calendar
+              bordered
+              renderCell={renderCell}
+              onChange={handleCalendarChange}
+              value={visibleMonth}
+            />
+          ) : (
+            renderListView()
+          )} />
+          <Route path="/game/:id" element={<GameDetails />} /> {/* Route for GameDetails */}
         </Routes>
       </div>
     </Router>
