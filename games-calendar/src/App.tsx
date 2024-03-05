@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 import { Calendar, Whisper, Popover, Button, ButtonGroup, Panel } from 'rsuite';
+import GameDetails from './GameDetails'; // Import the GameDetails component
 
 const apiKey = 'c9bf349e90a04c5f852186b91ab54688';
 const apiUrl = 'https://api.rawg.io/api/';
@@ -20,17 +21,6 @@ async function fetchPopularGames(startDate, endDate) {
     return [];
   }
 }
-
-const GameDetails = () => {
-  const { id } = useParams();
-
-  return (
-    <div>
-      <h2>Game Details for ID: {id}</h2>
-      {/* Fetch and display game details using the id */}
-    </div>
-  );
-};
 
 const App = () => {
   const [popularGames, setPopularGames] = useState([]);
@@ -81,7 +71,7 @@ const App = () => {
               <Popover>
                 {gameTitles.map((title, index) => (
                   <p key={index}>
-                    <Link to={`/game/${title}`} style={{ color: 'inherit' }}>{title}</Link>
+                    <Link to={`/game/${popularGames.find(game => game.name === title).id}`} style={{ color: 'inherit' }}>{title}</Link>
                   </p>
                 ))}
               </Popover>
@@ -95,7 +85,7 @@ const App = () => {
           <div className="calendar-cell">
             {displayList.map((title, index) => (
               <div key={index}>
-                <Link to={`/game/${title}`} style={{ color: 'inherit' }}>{title}</Link>
+                <Link to={`/game/${popularGames.find(game => game.name === title).id}`} style={{ color: 'inherit' }}>{title}</Link>
               </div>
             ))}
             {moreItem}
@@ -106,7 +96,7 @@ const App = () => {
           <div className="calendar-cell">
             {displayList.map((title, index) => (
               <div key={index}>
-                <Link to={`/game/${title}`} style={{ color: 'inherit' }}>{title}</Link>
+                <Link to={`/game/${popularGames.find(game => game.name === title).id}`} style={{ color: 'inherit' }}>{title}</Link>
               </div>
             ))}
           </div>
@@ -118,6 +108,7 @@ const App = () => {
       return null;
     }
   }
+  
   
 
   function getGameTitles(date) {
@@ -141,10 +132,10 @@ const App = () => {
 
     return (
       <div>
-        <ButtonGroup size="lg" style={{ marginBottom: 10 }}>
-          <Button onClick={() => setVisibleMonth(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1))}>Previous Month</Button>
-          <Button>{visibleMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</Button>
-          <Button onClick={() => setVisibleMonth(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1))}>Next Month</Button>
+        <ButtonGroup size="md" style={{ margin: 10 }}>
+          <Button onClick={() => setVisibleMonth(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1))}>&lt;</Button>
+          <Button>{visibleMonth.toLocaleString('default', { month: 'short', year: 'numeric' })}</Button>
+          <Button onClick={() => setVisibleMonth(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1))}>&gt;</Button>
         </ButtonGroup>
         {weeks.map(week => (
           <div key={week.start}>
@@ -160,7 +151,7 @@ const App = () => {
     return (
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {games.map(game => (
-          <Link to={`/game/${game.name}`} style={{ textDecoration: 'none' }}>
+          <Link to={`/game/${game.id}`} style={{ textDecoration: 'none' }}>
           <Panel key={game.id} shaded bordered bodyFill style={{ width: 240, margin: 10 }}>
             <div style={{ flex: '1 0 auto' }}>
               <img src={game.background_image} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
