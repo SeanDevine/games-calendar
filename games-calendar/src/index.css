@@ -44,7 +44,6 @@ a:hover {
 
 body {
   margin: 0;
-  padding: 0 5%;
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -75,12 +74,46 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.background-container {
+  position: relative;
+}
+
+.content-container {
+  padding: 0 5%;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('assets/ink-background.jpg');
+  background-size: cover;
+  background-position: center;
+  /* z-index: -1; */
+}
+
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0), rgb(15, 19, 26));
+  /* z-index: -1; */
+}
+
 .listViewButton {
-  background-color: #10171d00;
+  background-color: #272c3600;
 }
 
 .filterButton {
   margin: 0 0.3rem;
+}
+
+.listViewSpacing {
+  margin-top: 3rem;
 }
 
 .gameTitle {
@@ -88,8 +121,11 @@ button:focus-visible {
 }
 
 .labelText {
-  color: #919191;
   font-family: "Electrolize";
+}
+
+.labelName {
+  color: #919191;
 }
 
 @media (prefers-color-scheme: light) {

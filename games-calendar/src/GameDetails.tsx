@@ -37,8 +37,8 @@ const GameDetails = () => {
             </div>
             <div style={{ flex: '1 0 60%' }}>
               <h2 className='gameTitle'>{gameDetails.name}</h2>
-              <p><strong className='labelText'>Release Date:</strong> {gameDetails.released}</p>
-              <p><strong className='labelText'>Platforms:</strong> {gameDetails.platforms.map((platform: any) => platform.platform.name).join(', ')}</p>
+              <p className='labelText'><strong className='labelName'>Release Date:</strong> {gameDetails.released}</p>
+              <p className='labelText'><strong className='labelName'>Platforms:</strong> {gameDetails.platforms.map((platform: any) => platform.platform.name).join(', ')}</p>
             </div>
           </div>
           <div>

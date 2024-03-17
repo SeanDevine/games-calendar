@@ -205,7 +205,7 @@ const App = () => {
 
   function renderListView() {
     const weeks = getWeekSections();
-
+  
     return (
       <div>
         <ButtonGroup size="md" style={{ margin: 10 }}>
@@ -216,31 +216,35 @@ const App = () => {
         {weeks.map(week => (
           <div key={week.start}>
             <h4>{week.start.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - {week.end.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h4>
-            <div>{renderGameCards(popularGames.filter(game => new Date(game.released) >= week.start && new Date(game.released) <= week.end))}</div>
+            <div>{renderSortedGameCards(popularGames.filter(game => new Date(game.released) >= week.start && new Date(game.released) <= week.end))}</div>
           </div>
         ))}
       </div>
     );
   }
-
-  function renderGameCards(games) {
+  
+  function renderSortedGameCards(games) {
+    // Sort games by release date
+    const sortedGames = games.slice().sort((a, b) => new Date(a.released) - new Date(b.released));
+  
     return (
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {games.map(game => (
+        {sortedGames.map(game => (
           <Link to={`/game/${game.id}`} style={{ textDecoration: 'none' }}>
-          <Panel key={game.id} shaded bordered bodyFill style={{ width: 240, margin: 10 }}>
-            <div style={{ flex: '1 0 auto' }}>
-              <img src={game.background_image} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
-            </div>
-            <Panel header={game.name} style={{ height: 120, overflow: 'hidden' }}>
-              <p style={{ margin: 0, alignSelf: 'flex-end' }}>Release Date: {game.released}</p>
+            <Panel key={game.id} shaded bordered bodyFill style={{ width: 240, margin: 10 }}>
+              <div style={{ flex: '1 0 auto' }}>
+                <img src={game.background_image} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
+              </div>
+              <Panel header={game.name} style={{ height: 120, overflow: 'hidden' }}>
+                <p style={{ margin: 0, alignSelf: 'flex-end' }}>Release Date: {game.released}</p>
+              </Panel>
             </Panel>
-          </Panel>
           </Link>
         ))}
       </div>
     );
   }
+  
 
   function getWeekSections() {
     const weeks = [];
@@ -266,35 +270,39 @@ const App = () => {
 
   return (
     <Router>
-      <div>
-        {/* Define routes */}
-        <Routes>
-          <Route path="/" element={view === 'calendar' ? (
-            <div>
-              <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
-              {renderPlatformCheckboxes()}
-              {renderMatureFilterToggle()}
-              <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
-              {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
-              <Calendar
-                bordered
-                renderCell={renderCell}
-                onChange={handleCalendarChange}
-                value={visibleMonth}
-              />
-            </div>
-          ) : (
-            <div>
-              <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
-              {renderPlatformCheckboxes()}
-              {renderMatureFilterToggle()}
-              <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
-              {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
-              {renderListView()}
-            </div>
-          )} />
-          <Route path="/game/:id" element={<GameDetails />} /> {/* Route for GameDetails */}
-        </Routes>
+      <div className="background-container">
+        {/* <div className="background-image"></div>
+        <div className="gradient-overlay"></div> */}
+        <div className='content-container'>
+          {/* Define routes */}
+          <Routes>
+            <Route path="/" element={view === 'calendar' ? (
+              <div>
+                <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
+                {renderPlatformCheckboxes()}
+                {renderMatureFilterToggle()}
+                <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
+                {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
+                <Calendar
+                  bordered
+                  renderCell={renderCell}
+                  onChange={handleCalendarChange}
+                  value={visibleMonth}
+                />
+              </div>
+            ) : (
+              <div>
+                <Button className='listViewSpacing' onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
+                {renderPlatformCheckboxes()}
+                {renderMatureFilterToggle()}
+                <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
+                {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
+                {renderListView()}
+              </div>
+            )} />
+            <Route path="/game/:id" element={<GameDetails />} /> {/* Route for GameDetails */}
+          </Routes>
+        </div>
       </div>
     </Router>
   );
