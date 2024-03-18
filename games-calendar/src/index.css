@@ -124,6 +124,16 @@ button:focus-visible {
   background-color: #030a14;
 }
 
+.gameImage {
+  width: 100%; /* Fill the width of the container */
+  max-width: 600px; /* Limit the width to 600px */
+  object-fit: cover; /* Cover the container while maintaining aspect ratio */
+}
+
+.gameDescription {
+  width: 60%;
+}
+
 .cardTitle {
   display: -webkit-box;
   -webkit-line-clamp: 2;
