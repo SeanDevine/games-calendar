@@ -222,7 +222,7 @@ const App = () => {
             return (
               <div key={week.start}>
                 <h4>{week.start.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - {week.end.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h4>
-                <div>{renderSortedGameCards(gamesInWeek)}</div>
+                <div>{renderGameCards(gamesInWeek)}</div>
               </div>
             );
           } else {
@@ -234,20 +234,21 @@ const App = () => {
   }
   
   
-  function renderSortedGameCards(games) {
+  function renderGameCards(games) {
     // Sort games by release date
     const sortedGames = games.slice().sort((a, b) => new Date(a.released) - new Date(b.released));
-  
+    
     return (
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {sortedGames.map(game => (
-          <Link to={`/game/${game.id}`} style={{ textDecoration: 'none' }}>
-            <Panel key={game.id} shaded bordered bodyFill style={{ width: 240, margin: 10 }}>
+          <Link to={`/game/${game.id}`} style={{ textDecoration: 'none' }} key={game.id}>
+            <Panel className='gameCard' shaded bordered bodyFill style={{ width: 240, margin: 10 }}>
               <div style={{ flex: '1 0 auto' }}>
                 <img src={game.background_image} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
               </div>
-              <Panel header={game.name} style={{ height: 120, overflow: 'hidden' }}>
-                <p style={{ margin: 0, alignSelf: 'flex-end' }}>Release Date: {game.released}</p>
+              <Panel style={{ height: 120, overflow: 'hidden' }}>
+                <h5 className='cardTitle'>{game.name}</h5>
+                <p  className='labelText' style={{ margin: 0, alignSelf: 'flex-end' }}>Release: {game.released}</p>
               </Panel>
             </Panel>
           </Link>
@@ -255,6 +256,8 @@ const App = () => {
       </div>
     );
   }
+  
+  
   
 
   function getWeekSections() {
