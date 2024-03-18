@@ -36,14 +36,29 @@ const GameDetails = () => {
           <div>
             <div style={{ display: 'flex' }}>
               <div style={{ flex: '1 0 40%', paddingRight: '20px' }}>
-                <img className='gameImage' src={gameDetails.background_image} alt={gameDetails.name}/>
+                {gameDetails.background_image ? (
+                  <img className='gameImage' src={gameDetails.background_image} alt={gameDetails.name}/>
+                ) : (
+                  <img className='gameImage' src={gameDetails.background_image} alt={gameDetails.name}/>
+                )}
               </div>
               <div style={{ flex: '1 0 60%' }}>
                 <h2 className='gameTitle'>{gameDetails.name}</h2>
-                <p className='labelText'><strong className='labelName'>Release Date:</strong> {gameDetails.released}</p>
+                {gameDetails.released ? (
+                  <p className='labelText'><strong className='labelName'>Release Date: </strong> {gameDetails.released}</p>
+                ) : (
+                  <p className='labelText'><strong className='labelName'>Release Date: </strong>None available</p>
+                )}
                 <p className='labelText'><strong className='labelName'>Platforms:</strong> {gameDetails.platforms.map((platform: any) => platform.platform.name).join(', ')}</p>
-                <p className='labelText labelName'>Description:</p>
-                <p>{gameDetails.description_raw}</p>
+                {gameDetails.description_raw ? (
+                  <div>
+                    <p className='labelText labelName'>Description:</p>
+                    <p>{gameDetails.description_raw}</p>
+                  </div>
+                ) : (
+                  <p className='labelText labelName'>No description available</p>
+                )}
+                
               </div>
             </div>
           </div>
