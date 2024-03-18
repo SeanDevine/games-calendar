@@ -107,7 +107,7 @@ const App = () => {
     return (
       <div>
         {Object.entries(platformFilters).map(([platform, checked]) => (
-          <Checkbox key={platform} checked={checked} onChange={() => togglePlatformFilter(platform)}>
+          <Checkbox className='platform' key={platform} checked={checked} onChange={() => togglePlatformFilter(platform)}>
             {platform}
           </Checkbox>
         ))}
@@ -213,15 +213,26 @@ const App = () => {
           <Button className='listViewButton'>{visibleMonth.toLocaleString('default', { month: 'short', year: 'numeric' })}</Button>
           <Button className='listViewButton' onClick={() => setVisibleMonth(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1))}>&gt;</Button>
         </ButtonGroup>
-        {weeks.map(week => (
-          <div key={week.start}>
-            <h4>{week.start.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - {week.end.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h4>
-            <div>{renderSortedGameCards(popularGames.filter(game => new Date(game.released) >= week.start && new Date(game.released) <= week.end))}</div>
-          </div>
-        ))}
+        {weeks.map(week => {
+          const gamesInWeek = popularGames.filter(game => {
+            const releaseDate = new Date(game.released);
+            return releaseDate >= week.start && releaseDate <= week.end;
+          });
+          if (gamesInWeek.length > 0) {
+            return (
+              <div key={week.start}>
+                <h4>{week.start.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - {week.end.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h4>
+                <div>{renderSortedGameCards(gamesInWeek)}</div>
+              </div>
+            );
+          } else {
+            return null; // Don't render week section if there are no games
+          }
+        })}
       </div>
     );
   }
+  
   
   function renderSortedGameCards(games) {
     // Sort games by release date
