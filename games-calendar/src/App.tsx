@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 import { Calendar, Whisper, Popover, Button, ButtonGroup, Panel, Checkbox } from 'rsuite';
 import GameDetails from './GameDetails'; // Import the GameDetails component
+import placeholderImage from './assets/gamecard_placeholder.jpg';
 
 const apiKey = 'c9bf349e90a04c5f852186b91ab54688';
 const apiUrl = 'https://api.rawg.io/api/';
@@ -246,7 +247,12 @@ const App = () => {
           <Link to={`/game/${game.id}`} style={{ textDecoration: 'none' }} key={game.id}>
             <Panel className='gameCard' shaded bordered bodyFill style={{ width: 240, margin: 10 }}>
               <div style={{ flex: '1 0 auto' }}>
-                <img src={game.background_image} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
+                {game.background_image ? (
+                  <img src={game.background_image} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
+                ) : (
+                  <img src={placeholderImage} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
+                )}
+                
               </div>
               <Panel style={{ height: 120, overflow: 'hidden' }}>
                 <h5 className='cardTitle'>{game.name}</h5>
@@ -283,45 +289,57 @@ const App = () => {
   
     return weeks;
   }
-
+  
   return (
     <Router>
-      <div className="background-container">
-        {/* <div className="background-image"></div>
-        <div className="gradient-overlay"></div> */}
-        <div className='content-container'>
-          {/* Define routes */}
-          <Routes>
-            <Route path="/" element={view === 'calendar' ? (
-              <div>
-                <Button onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
-                {renderPlatformCheckboxes()}
-                {renderMatureFilterToggle()}
-                <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
-                {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
-                <Calendar
-                  bordered
-                  renderCell={renderCell}
-                  onChange={handleCalendarChange}
-                  value={visibleMonth}
-                />
+      {/* Define routes */}
+      <Routes>
+        <Route
+          path="/"
+          element={view === 'calendar' ? (
+            <div className="background-container">
+              <div className="background-image"></div>
+              <div className="gradient-overlay"></div>
+              <div className='content-container'>
+                <div>
+                  <Button onClick={toggleView}>
+                    {view === 'calendar' ? 'List View' : 'Calendar View'}
+                  </Button>
+                  {renderPlatformCheckboxes()}
+                  {renderMatureFilterToggle()}
+                  <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
+                  {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
+                  <div className="calendar-container">
+                    <div className="calendar-overlay"></div>
+                    <Calendar
+                      bordered
+                      renderCell={renderCell}
+                      onChange={handleCalendarChange}
+                      value={visibleMonth}
+                    />
+                  </div>
+                </div>
               </div>
-            ) : (
+            </div>
+          ) : (
+            <div className='content-container'>
               <div>
-                <Button className='listViewSpacing' onClick={toggleView}>{view === 'calendar' ? 'List View' : 'Calendar View'}</Button>
+                <Button className='listViewSpacing' onClick={toggleView}>
+                  {view === 'calendar' ? 'List View' : 'Calendar View'}
+                </Button>
                 {renderPlatformCheckboxes()}
                 {renderMatureFilterToggle()}
                 <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
                 {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
                 {renderListView()}
               </div>
-            )} />
-            <Route path="/game/:id" element={<GameDetails />} /> {/* Route for GameDetails */}
-          </Routes>
-        </div>
-      </div>
+            </div>
+          )}
+        />
+        <Route path="/game/:id" element={<GameDetails />} /> {/* Route for GameDetails */}
+      </Routes>
     </Router>
-  );
-};
+  );  
+};  
 
 export default App;

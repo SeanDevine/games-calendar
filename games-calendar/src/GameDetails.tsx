@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Header, Content, Footer, Sidebar, FlexboxGrid } from 'rsuite';
 import FlexboxGridItem from 'rsuite/esm/FlexboxGrid/FlexboxGridItem';
+import placeholderImage from './assets/gamecard_placeholder.jpg';
+
 
 const apiKey = 'c9bf349e90a04c5f852186b91ab54688';
 const apiUrl = 'https://api.rawg.io/api/';
@@ -39,7 +41,8 @@ const GameDetails = () => {
                 {gameDetails.background_image ? (
                   <img className='gameImage' src={gameDetails.background_image} alt={gameDetails.name}/>
                 ) : (
-                  <img className='gameImage' src={gameDetails.background_image} alt={gameDetails.name}/>
+                  <img className='gameImage' src={placeholderImage} alt={gameDetails.name}/>
+
                 )}
               </div>
               <div style={{ flex: '1 0 60%' }}>
