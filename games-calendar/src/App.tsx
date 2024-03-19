@@ -161,7 +161,8 @@ const App = () => {
           <div className="calendar-cell">
             {displayList.map((title, index) => (
               <div key={index}>
-                <Link to={`/game/${popularGames.find(game => game.name === title).id}`} style={{ color: 'inherit' }}>{title}</Link>
+                <Link to={`/game/${popularGames.find(game => game.name === title).id}`} style={{ color: 'inherit', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>{title}</Link>
+
               </div>
             ))}
             {moreItem}
@@ -172,7 +173,8 @@ const App = () => {
           <div className="calendar-cell">
             {displayList.map((title, index) => (
               <div key={index}>
-                <Link to={`/game/${popularGames.find(game => game.name === title).id}`} style={{ color: 'inherit' }}>{title}</Link>
+                <Link to={`/game/${popularGames.find(game => game.name === title).id}`} style={{ color: 'inherit', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>{title}</Link>
+
               </div>
             ))}
           </div>
