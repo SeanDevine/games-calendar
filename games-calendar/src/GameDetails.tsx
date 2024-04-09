@@ -32,10 +32,10 @@ const GameDetails = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       {gameDetails && (
-        <div style={{ width: '40%', position: 'relative' }}>
-          <Button><a href='javascript:window.history.back()'>Back</a></Button>
+        <div className='gameDetails-container' style={{ position: 'relative' }}>
+          <Button style={{ margin: '10px 0'}}><a href='javascript:window.history.back()'>Back</a></Button>
           <img className='gameImage' src={gameDetails.background_image ? gameDetails.background_image : placeholderImage} alt={gameDetails.name} style={{ width: '100%' }} />
-          <h2 className='gameTitle'>{gameDetails.name}</h2>
+          <h4 className='gameTitle'>{gameDetails.name}</h4>
           <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '10px' }}> {/* Added alignItems: 'center' to align items vertically */}
             {gameDetails.released && (
               <span className='labelText'><strong className='labelName'>Release Date:</strong> {gameDetails.released}</span>

@@ -230,7 +230,7 @@ const App = () => {
           if (gamesInWeek.length > 0) {
             return (
               <div key={week.start}>
-                <h4>{week.start.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - {week.end.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h4>
+                <h3 className='weekLabels'>{week.start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {week.end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</h3>
                 <div>{renderGameCards(gamesInWeek)}</div>
               </div>
             );
@@ -250,19 +250,18 @@ const App = () => {
     return (
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {sortedGames.map(game => (
-          <Link to={`/game/${game.id}`} style={{ textDecoration: 'none' }} key={game.id}>
-            <Panel className='gameCard' shaded bordered bodyFill style={{ width: 240, margin: 10 }}>
-              <div style={{ flex: '1 0 auto' }}>
+          <Link className='gameCard' to={`/game/${game.id}`} style={{ textDecoration: 'none' }} key={game.id}>
+            <Panel shaded bordered bodyFill style={{ height: '100%' }}>
+            <div style={{ flex: '1 0 auto' }}>
                 {game.background_image ? (
-                  <img src={game.background_image} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
+                  <img className='gameCard-image' src={game.background_image} alt={game.name}/>
                 ) : (
-                  <img src={placeholderImage} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
+                  <img className='gameCard-image' src={placeholderImage} alt={game.name}/>
                 )}
-                
               </div>
-              <Panel style={{ height: 120, overflow: 'hidden' }}>
+              <Panel className='gameCard-details' style={{ overflow: 'hidden' }}>
                 <h5 className='cardTitle'>{game.name}</h5>
-                <p  className='labelText' style={{ margin: 0, alignSelf: 'flex-end' }}>Release: {game.released}</p>
+                <p className='labelText' style={{ margin: 0, alignSelf: 'flex-end' }}>Release: {game.released}</p>
               </Panel>
             </Panel>
           </Link>
@@ -270,6 +269,7 @@ const App = () => {
       </div>
     );
   }
+  
 
   function getWeekSections() {
     const weeks = [];
@@ -305,19 +305,22 @@ const App = () => {
               <div className="gradient-overlay"></div>
               <div className='content-container'>
                 <div>
-                  <Button onClick={toggleView}>
-                    {view === 'calendar' ? 'List View' : 'Calendar View'}
-                  </Button>
-                  <Button onClick={toggleFilters}>Show Filters</Button>
-                  {showFilters && (
-                    <div>
-                      {/* Your filter options JSX */}
-                      {renderPlatformCheckboxes()}
-                      {renderMatureFilterToggle()}
-                      <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
-                      {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
-                    </div>
-                  )}
+                  <div style={{padding: '10px 0'}}>
+                    <Button onClick={toggleView}>
+                      {view === 'calendar' ? 'List View' : 'Calendar View'}
+                    </Button>
+                    <Button style={{ margin: '0 10px'}} onClick={toggleFilters}>Show Filters</Button>
+                    {showFilters && (
+                      <div>
+                        {/* Your filter options JSX */}
+                        {renderPlatformCheckboxes()}
+                        {renderMatureFilterToggle()}
+                        <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
+                        {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
+                      </div>
+                    )}
+                  </div>
+                  
                   <div className="calendar-container">
                     <div className="calendar-overlay"></div>
                     <Calendar
@@ -333,19 +336,21 @@ const App = () => {
           ) : (
             <div className='content-container'>
               <div>
-                <Button className='listViewSpacing' onClick={toggleView}>
-                  {view === 'calendar' ? 'List View' : 'Calendar View'}
-                </Button>
-                <Button onClick={toggleFilters}>Show Filters</Button>
-                {showFilters && (
-                  <div>
-                    {/* Your filter options JSX */}
-                    {renderPlatformCheckboxes()}
-                    {renderMatureFilterToggle()}
-                    <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
-                    {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
-                  </div>
-                )}
+                <div style={{padding: '10px 0'}}>
+                  <Button onClick={toggleView}>
+                    {view === 'calendar' ? 'List View' : 'Calendar View'}
+                  </Button>
+                  <Button style={{ margin: '0 10px'}} onClick={toggleFilters}>Show Filters</Button>
+                  {showFilters && (
+                    <div>
+                      {/* Your filter options JSX */}
+                      {renderPlatformCheckboxes()}
+                      {renderMatureFilterToggle()}
+                      <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
+                      {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
+                    </div>
+                  )}
+                </div>
                 {renderListView()}
               </div>
             </div>
