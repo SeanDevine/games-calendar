@@ -70,32 +70,28 @@ const App = () => {
     setMatureFilter(prevFilter => !prevFilter);
   }
   
-
   function applyFilters() {
-  const filteredGames = popularGames.filter(game => {
-    const platformIds = game.platforms.map(platform => platform.platform.id);
-    const hasValidPlatform = platformIds.some(id => {
-      if (platformFilters.playstation && (id === 18 || id === 187)) return true;
-      if (platformFilters.xbox && (id === 1 || id === 186)) return true;
-      if (platformFilters.pc && id === 4) return true;
-      if (platformFilters.switch && id === 7) return true;
-      if (platformFilters.mobile && (id === 21 || id === 3)) return true;
-      return false;
+    const filteredGames = popularGames.filter(game => {
+      const platformIds = game.platforms.map(platform => platform.platform.id);
+      const hasValidPlatform = platformIds.some(id => {
+        if (platformFilters.playstation && (id === 18 || id === 187)) return true;
+        if (platformFilters.xbox && (id === 1 || id === 186)) return true;
+        if (platformFilters.pc && id === 4) return true;
+        if (platformFilters.switch && id === 7) return true;
+        if (platformFilters.mobile && (id === 21 || id === 3)) return true;
+        return false;
+      });
+
+      const hasNoMatureTags = !game.tags || !game.tags.some(tag => 
+        ['sexual content', 'nsfw', 'mature', 'hentai'].includes(tag.name.toLowerCase())
+      );
+
+      return hasValidPlatform && hasNoMatureTags;
     });
 
-    const hasNoMatureTags = !game.tags || !game.tags.some(tag => 
-      ['sexual content', 'nsfw', 'mature', 'hentai'].includes(tag.name.toLowerCase())
-    );
-
-    return hasValidPlatform && hasNoMatureTags;
-  });
-
-  setPopularGames(filteredGames);
-  setFilterApplied(true);
-}
-
-  
-  
+    setPopularGames(filteredGames);
+    setFilterApplied(true);
+  }
 
   function clearFilters() {
     setPlatformFilters({
