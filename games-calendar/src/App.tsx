@@ -312,7 +312,6 @@ const App = () => {
                     <Button style={{ margin: '0 10px'}} onClick={toggleFilters}>Show Filters</Button>
                     {showFilters && (
                       <div>
-                        {/* Your filter options JSX */}
                         {renderPlatformCheckboxes()}
                         {renderMatureFilterToggle()}
                         <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
@@ -343,7 +342,6 @@ const App = () => {
                   <Button style={{ margin: '0 10px'}} onClick={toggleFilters}>Show Filters</Button>
                   {showFilters && (
                     <div>
-                      {/* Your filter options JSX */}
                       {renderPlatformCheckboxes()}
                       {renderMatureFilterToggle()}
                       <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>

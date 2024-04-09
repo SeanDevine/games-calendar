@@ -36,7 +36,7 @@ const GameDetails = () => {
           <Button style={{ margin: '10px 0'}} onClick={() => window.history.back()}>Back</Button>
           <img className='gameImage' src={gameDetails.background_image ? gameDetails.background_image : placeholderImage} alt={gameDetails.name} style={{ width: '100%' }} />
           <h4 className='gameTitle'>{gameDetails.name}</h4>
-          <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '10px' }}> {/* Added alignItems: 'center' to align items vertically */}
+          <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '10px' }}>
             {gameDetails.released && (
               <span className='labelText'><strong className='labelName'>Release Date:</strong> {gameDetails.released}</span>
             )}
