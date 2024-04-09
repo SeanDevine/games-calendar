@@ -33,7 +33,7 @@ const GameDetails = () => {
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       {gameDetails && (
         <div className='gameDetails-container' style={{ position: 'relative' }}>
-          <Button style={{ margin: '10px 0'}}><a href='javascript:window.history.back()'>Back</a></Button>
+          <Button style={{ margin: '10px 0'}} onClick={() => window.history.back()}>Back</Button>
           <img className='gameImage' src={gameDetails.background_image ? gameDetails.background_image : placeholderImage} alt={gameDetails.name} style={{ width: '100%' }} />
           <h4 className='gameTitle'>{gameDetails.name}</h4>
           <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '10px' }}> {/* Added alignItems: 'center' to align items vertically */}
