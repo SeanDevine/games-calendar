@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #0f131a;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -39,16 +39,16 @@ a {
   text-decoration: inherit;
 }
 a:hover {
-  transform: scale(1.15);
+  /* transform: scale(1.15); */
 }
 
-body {
+/* body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
+} */
 
 h1 {
   font-size: 3.2em;
@@ -141,8 +141,10 @@ button:focus-visible {
 
 .gameImage {
   width: 100%; /* Fill the width of the container */
-  max-width: 600px; /* Limit the width to 600px */
+  max-width: 900px; /* Limit the width to 600px */
   object-fit: cover; /* Cover the container while maintaining aspect ratio */
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .gameDescription {

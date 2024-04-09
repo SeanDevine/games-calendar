@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Header, Content, Footer, Sidebar, FlexboxGrid } from 'rsuite';
-import FlexboxGridItem from 'rsuite/esm/FlexboxGrid/FlexboxGridItem';
+import { FlexboxGrid, Button } from 'rsuite';
 import placeholderImage from './assets/gamecard_placeholder.jpg';
-
 
 const apiKey = 'c9bf349e90a04c5f852186b91ab54688';
 const apiUrl = 'https://api.rawg.io/api/';
@@ -32,42 +30,30 @@ const GameDetails = () => {
   }, [id]);
 
   return (
-    <FlexboxGrid justify='center'>
-      <FlexboxGridItem colspan={18}>
-        {gameDetails && (
-          <div>
-            <div style={{ display: 'flex' }}>
-              <div style={{ flex: '1 0 40%', paddingRight: '20px' }}>
-                {gameDetails.background_image ? (
-                  <img className='gameImage' src={gameDetails.background_image} alt={gameDetails.name}/>
-                ) : (
-                  <img className='gameImage' src={placeholderImage} alt={gameDetails.name}/>
-
-                )}
-              </div>
-              <div style={{ flex: '1 0 60%' }}>
-                <h2 className='gameTitle'>{gameDetails.name}</h2>
-                {gameDetails.released ? (
-                  <p className='labelText'><strong className='labelName'>Release Date: </strong> {gameDetails.released}</p>
-                ) : (
-                  <p className='labelText'><strong className='labelName'>Release Date: </strong>None available</p>
-                )}
-                <p className='labelText'><strong className='labelName'>Platforms:</strong> {gameDetails.platforms.map((platform: any) => platform.platform.name).join(', ')}</p>
-                {gameDetails.description_raw ? (
-                  <div>
-                    <p className='labelText labelName'>Description:</p>
-                    <p>{gameDetails.description_raw}</p>
-                  </div>
-                ) : (
-                  <p className='labelText labelName'>No description available</p>
-                )}
-                
-              </div>
-            </div>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      {gameDetails && (
+        <div style={{ width: '40%', position: 'relative' }}>
+          <Button><a href='javascript:window.history.back()'>Back</a></Button>
+          <img className='gameImage' src={gameDetails.background_image ? gameDetails.background_image : placeholderImage} alt={gameDetails.name} style={{ width: '100%' }} />
+          <h2 className='gameTitle'>{gameDetails.name}</h2>
+          <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '10px' }}> {/* Added alignItems: 'center' to align items vertically */}
+            {gameDetails.released && (
+              <span className='labelText'><strong className='labelName'>Release Date:</strong> {gameDetails.released}</span>
+            )}
+            <span className='labelText' style={{ marginLeft: '15px' }}><strong className='labelName'>Platforms:</strong> {gameDetails.platforms.map((platform: any) => platform.platform.name).join(', ')}</span>
           </div>
-        )}
-      </FlexboxGridItem>
-    </FlexboxGrid>
+          {gameDetails.description_raw && (
+            <div>
+              <p className='labelText labelName'>Description:</p>
+              <p style={{ paddingBottom: '10px' }}>{gameDetails.description_raw}</p>
+            </div>
+          )}
+          {!gameDetails.description_raw && (
+            <p className='labelText labelName'>No description available</p>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

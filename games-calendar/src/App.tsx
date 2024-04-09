@@ -23,6 +23,8 @@ const App = () => {
   const [filterApplied, setFilterApplied] = useState(false);
   const [matureFilter, setMatureFilter] = useState(true);
 
+  const [showFilters, setShowFilters] = useState(false);
+
 
   useEffect(() => {
     fetchPopularGames();
@@ -51,6 +53,10 @@ const App = () => {
 
   function toggleView() {
     setView(view === 'calendar' ? 'list' : 'calendar');
+  }
+
+  function toggleFilters() {
+    setShowFilters(!showFilters); // Toggle the state variable
   }
 
   function togglePlatformFilter(platform) {
@@ -264,9 +270,6 @@ const App = () => {
       </div>
     );
   }
-  
-  
-  
 
   function getWeekSections() {
     const weeks = [];
@@ -305,10 +308,16 @@ const App = () => {
                   <Button onClick={toggleView}>
                     {view === 'calendar' ? 'List View' : 'Calendar View'}
                   </Button>
-                  {renderPlatformCheckboxes()}
-                  {renderMatureFilterToggle()}
-                  <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
-                  {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
+                  <Button onClick={toggleFilters}>Show Filters</Button>
+                  {showFilters && (
+                    <div>
+                      {/* Your filter options JSX */}
+                      {renderPlatformCheckboxes()}
+                      {renderMatureFilterToggle()}
+                      <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
+                      {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
+                    </div>
+                  )}
                   <div className="calendar-container">
                     <div className="calendar-overlay"></div>
                     <Calendar
@@ -327,10 +336,16 @@ const App = () => {
                 <Button className='listViewSpacing' onClick={toggleView}>
                   {view === 'calendar' ? 'List View' : 'Calendar View'}
                 </Button>
-                {renderPlatformCheckboxes()}
-                {renderMatureFilterToggle()}
-                <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
-                {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
+                <Button onClick={toggleFilters}>Show Filters</Button>
+                {showFilters && (
+                  <div>
+                    {/* Your filter options JSX */}
+                    {renderPlatformCheckboxes()}
+                    {renderMatureFilterToggle()}
+                    <Button className='filterButton' onClick={applyFilters}>Apply Filters</Button>
+                    {filterApplied && <Button className='filterButton' onClick={clearFilters}>Clear Filters</Button>}
+                  </div>
+                )}
                 {renderListView()}
               </div>
             </div>
