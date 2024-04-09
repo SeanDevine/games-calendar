@@ -38,7 +38,7 @@ a {
   color: #e2e2e2;
   text-decoration: inherit;
 }
-a:hover {
+a:hover { 
   /* transform: scale(1.15); */
 }
 
